@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sean Milligan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::selection { background: rgba(74,112,82,0.18); color: var(--ink); }
+
+    :root {
+      --paper:      #f4efe6;
+      --paper2:     #ede7db;
+      --paper3:     #e6ded0;
+      --ink:        #1e2419;
+      --green:      #3d6647;
+      --green-mid:  #5a8a65;
+      --green-pale: rgba(74,112,82,0.08);
+      --stone:      #7a7060;
+      --border:     #d4cdc0;
+      --serif:      'Cormorant Garant', serif;
+      --lora:       'Lora', serif;
+      --mono:       'IBM Plex Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--lora);
+      font-weight: 400;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.25rem 5rem;
+      background: rgba(244,239,230,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, box-shadow .3s;
+    }
+    nav.scrolled {
+      background: rgba(244,239,230,0.98);
+      box-shadow: 0 2px 20px rgba(30,36,25,0.07);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: .06em;
+      text-decoration: none;
+      transition: color .25s;
+    }
+    .nav-logo:hover { color: var(--ink); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 300;
+      color: var(--stone);
+      text-decoration: none;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      position: relative; padding-bottom: 3px;
+      transition: color .25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--green);
+      transition: width .3s ease;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--green); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 5rem 5rem;
+      gap: 4rem;
+      background: var(--paper);
+    }
+
+    .hero-left { display: flex; flex-direction: column; }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 300;
+      color: var(--green-mid);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp .7s .15s forwards;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.8rem, 6.5vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--ink);
+      opacity: 0; animation: fadeUp .7s .3s forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--green);
+      display: block;
+    }
+
+    .hero-rule {
+      width: 3rem; height: 2px;
+      background: var(--green);
+      margin: 2rem 0;
+      opacity: 0; animation: fadeUp .7s .45s forwards;
+      transition: width .4s ease;
+    }
+    .hero-left:hover .hero-rule { width: 5rem; }
+
+    .hero-tagline {
+      font-family: var(--lora);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--stone);
+      max-width: 440px;
+      line-height: 1.85;
+      opacity: 0; animation: fadeUp .7s .6s forwards;
+    }
+
+    .hero-pills {
+      display: flex; gap: .65rem; flex-wrap: wrap;
+      margin-top: 2rem;
+      opacity: 0; animation: fadeUp .7s .75s forwards;
+    }
+    .pill {
+      font-family: var(--mono);
+      font-size: .62rem; font-weight: 300;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .3rem .8rem;
+      border: 1px solid var(--border);
+      color: var(--stone);
+      border-radius: 2px;
+      background: var(--paper2);
+      transition: border-color .25s, color .25s, background .25s;
+    }
+    .pill:hover { border-color: var(--green-mid); color: var(--green); background: var(--paper); }
+
+    .hero-cta {
+      display: flex; gap: 1rem; margin-top: 2.5rem;
+      opacity: 0; animation: fadeUp .7s .9s forwards;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      font-family: var(--mono);
+      font-size: .68rem; font-weight: 400;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .8rem 1.8rem;
+      text-decoration: none; border-radius: 2px;
+      display: inline-block;
+      transition: background .25s, color .25s, border-color .25s, box-shadow .25s, transform .15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--green);
+      color: var(--paper);
+      border: 1px solid var(--green);
+    }
+    .btn-primary:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+      box-shadow: 0 6px 20px rgba(30,36,25,0.15);
+    }
+    .btn-outline {
+      border: 1px solid var(--stone);
+      color: var(--stone);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-pale);
+    }
+
+    /* ─── HERO RIGHT: Chart ─── */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0; animation: fadeIn 1s .8s forwards;
+    }
+
+    .chart-card {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 2rem 1.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 28px rgba(30,36,25,0.07);
+      transition: box-shadow .3s, transform .3s;
+    }
+    .chart-card:hover {
+      box-shadow: 0 8px 40px rgba(30,36,25,0.12);
+      transform: translateY(-3px);
+    }
+    .chart-card-label {
+      font-family: var(--mono);
+      font-size: .62rem; font-weight: 300;
+      color: var(--stone);
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .chart-svg .chart-line {
+      stroke-dasharray: 600; stroke-dashoffset: 600;
+      animation: drawLine 2.5s 1.2s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    .chart-caption {
+      font-family: var(--mono);
+      font-size: .6rem; font-weight: 300;
+      color: var(--stone); opacity: .6;
+      letter-spacing: .08em;
+      margin-top: 1rem;
+      text-align: right;
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 7rem 5rem; position: relative; }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    .section-num {
+      font-family: var(--mono); font-size: .62rem; font-weight: 300;
+      color: var(--green-mid); letter-spacing: .15em;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: 2.6rem; font-weight: 300;
+      color: var(--ink); letter-spacing: .01em;
+    }
+    .section-line {
+      flex: 1; height: 1px; background: var(--border);
+      transform-origin: left; transform: scaleX(0);
+      transition: transform .9s ease .1s;
+    }
+    .section-header.visible .section-line { transform: scaleX(1); }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--paper2); }
+
+    .about-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 6rem; align-items: start; }
+
+    .about-text p {
+      font-family: var(--lora);
+      font-size: .97rem; color: var(--stone);
+      margin-bottom: 1.35rem; line-height: 1.9;
+    }
+    .about-text p strong { color: var(--ink); font-weight: 500; }
+
+    .about-sidebar { display: flex; flex-direction: column; gap: 0; }
+
+    .sidebar-block {
+      padding: 1rem 0 1rem 1.25rem;
+      border-left: 2px solid var(--border);
+      transition: border-color .3s, padding-left .3s, background .3s;
+      cursor: default;
+    }
+    .sidebar-block + .sidebar-block { border-top: 1px solid var(--border); }
+    .sidebar-block:hover {
+      border-color: var(--green);
+      padding-left: 1.65rem;
+      background: rgba(74,112,82,0.04);
+    }
+    .sidebar-block-label {
+      font-family: var(--mono); font-size: .58rem; font-weight: 300;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--green-mid); margin-bottom: .45rem;
+      transition: color .25s;
+    }
+    .sidebar-block:hover .sidebar-block-label { color: var(--green); }
+    .sidebar-block-value { font-family: var(--lora); font-size: .88rem; color: var(--stone); line-height: 1.6; }
+    .sidebar-block-value a {
+      color: var(--green); text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s;
+    }
+    .sidebar-block-value a:hover { border-color: var(--green); }
+
+    /* ─── PROJECTS ─── */
+    #projects { background: var(--paper); }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem; }
+
+    .project-card {
+      border: 1px solid var(--border);
+      padding: 2.25rem;
+      background: var(--paper2);
+      position: relative; overflow: hidden;
+      border-radius: 3px;
+      transition: border-color .3s, box-shadow .3s, transform .3s;
+      will-change: transform;
+    }
+    .project-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--green);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .project-card:hover {
+      border-color: transparent;
+      box-shadow: 0 8px 40px rgba(30,36,25,0.12);
+      transform: translateY(-4px);
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-version {
+      font-family: var(--mono); font-size: .6rem; font-weight: 300;
+      letter-spacing: .14em; color: var(--green-mid); text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    .project-title {
+      font-family: var(--serif); font-size: 1.4rem; font-weight: 400;
+      color: var(--ink); margin-bottom: .8rem; line-height: 1.25;
+      transition: color .25s;
+    }
+    .project-card:hover .project-title { color: var(--green); }
+    .project-desc {
+      font-family: var(--lora); font-size: .85rem; color: var(--stone);
+      line-height: 1.8; margin-bottom: 1.5rem;
+    }
+    .project-tags { display: flex; gap: .45rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .tag {
+      font-family: var(--mono); font-size: .57rem; font-weight: 300;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: .2rem .6rem;
+      background: var(--paper); border: 1px solid var(--border);
+      color: var(--stone); border-radius: 2px;
+      transition: border-color .2s, color .2s;
+    }
+    .tag:hover { border-color: var(--green-mid); color: var(--green); }
+
+    .project-link {
+      font-family: var(--mono); font-size: .65rem; font-weight: 300;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--green); text-decoration: none;
+      display: inline-flex; align-items: center; gap: .45rem;
+      border-bottom: 1px solid transparent;
+      transition: gap .25s, border-color .25s;
+    }
+    .project-link:hover { gap: .85rem; border-color: var(--green); }
+
+    .project-card.wip { opacity: .7; }
+    .wip-badge {
+      position: absolute; top: 1.1rem; right: 1.1rem;
+      font-family: var(--mono); font-size: .55rem; font-weight: 300;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .2rem .65rem;
+      background: var(--paper); border: 1px solid var(--border);
+      color: var(--stone); border-radius: 2px;
+    }
+
+    /* ─── SKILLS ─── */
+    #skills { background: var(--paper3); }
+
+    .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3rem; }
+    .skill-group-label {
+      font-family: var(--mono); font-size: .6rem; font-weight: 300;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--green-mid); margin-bottom: 1.25rem;
+      padding-bottom: .75rem; border-bottom: 1px solid var(--border);
+    }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .skill-list li {
+      font-family: var(--lora); font-size: .88rem; color: var(--stone);
+      display: flex; align-items: center; gap: .65rem;
+      padding: .55rem .5rem; border-radius: 2px;
+      border-bottom: 1px solid transparent;
+      transition: color .2s, background .2s, padding-left .2s, border-color .2s;
+    }
+    .skill-list li::before {
+      content: '–'; color: var(--green-mid); font-size: .8rem; font-weight: 300;
+      transition: color .2s; flex-shrink: 0;
+    }
+    .skill-list li:hover {
+      color: var(--ink); background: rgba(74,112,82,0.05);
+      padding-left: .9rem; border-color: var(--border);
+    }
+    .skill-list li:hover::before { color: var(--green); }
+
+    /* ─── INTERESTS ─── */
+    #interests { background: var(--paper2); }
+
+    .interests-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .interest-item {
+      flex: 1; min-width: 200px;
+      padding: 1.75rem;
+      background: var(--paper);
+      border: 1px solid var(--border); border-radius: 3px;
+      display: flex; align-items: flex-start; gap: 1.1rem;
+      transition: box-shadow .3s, transform .3s, border-color .3s;
+    }
+    .interest-item:hover {
+      box-shadow: 0 6px 28px rgba(30,36,25,0.09);
+      transform: translateY(-3px);
+      border-color: var(--green-mid);
+    }
+    .interest-icon {
+      font-size: 1.5rem; line-height: 1; margin-top: .1rem; flex-shrink: 0;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .interest-item:hover .interest-icon { transform: scale(1.2) rotate(-4deg); }
+    .interest-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+      color: var(--ink); margin-bottom: .3rem; transition: color .25s;
+    }
+    .interest-item:hover .interest-name { color: var(--green); }
+    .interest-desc { font-family: var(--lora); font-size: .82rem; color: var(--stone); line-height: 1.7; }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      padding: 7rem 5rem;
+    }
+    .contact-heading {
+      font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 4.2rem); font-weight: 300;
+      color: var(--paper); margin-bottom: 1rem; letter-spacing: .01em;
+    }
+    .contact-heading em { font-style: italic; color: var(--green-mid); }
+    .contact-sub {
+      font-family: var(--lora); font-size: .95rem;
+      color: rgba(244,239,230,0.55);
+      margin-bottom: 2.75rem; max-width: 440px;
+      margin-left: auto; margin-right: auto; line-height: 1.8;
+    }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* contact buttons on dark bg */
+    #contact .btn-primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--paper);
+    }
+    #contact .btn-primary:hover {
+      background: var(--green-mid);
+      border-color: var(--green-mid);
+    }
+    #contact .btn-outline {
+      border-color: rgba(244,239,230,0.3);
+      color: rgba(244,239,230,0.7);
+    }
+    #contact .btn-outline:hover {
+      border-color: var(--green-mid);
+      color: var(--green-mid);
+      background: rgba(74,112,82,0.1);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      padding: 1.75rem 5rem;
+      border-top: 1px solid rgba(244,239,230,0.08);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-text {
+      font-family: var(--mono); font-size: .62rem; font-weight: 300;
+      color: rgba(244,239,230,0.3); letter-spacing: .1em;
+    }
+    .footer-chinese {
+      font-family: var(--serif); font-size: 1.1rem;
+      color: var(--green-mid); opacity: .6;
+      letter-spacing: .2em;
+      transition: opacity .3s, letter-spacing .4s;
+    }
+    .footer-chinese:hover { opacity: 1; letter-spacing: .4em; }
+
+    /* ─── REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeUp  { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+      .hero-right { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      #contact { padding: 5rem 1.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: .65rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#">Sean Milligan</a>
+  <ul class="nav-links">
+    <li><a href="#about"    data-section="about">About</a></li>
+    <li><a href="#projects" data-section="projects">Research</a></li>
+    <li><a href="#skills"   data-section="skills">Skills</a></li>
+    <li><a href="#contact"  data-section="contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Financial Economist · Quantitative Researcher</div>
+    <h1 class="hero-name">Sean<em>Milligan</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-tagline">
+      Building quantitative research at the intersection of financial markets,
+      macroeconomics, and China capital flows. Pursuing a PhD in Financial Economics.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">Python</span>
+      <span class="pill">Bloomberg</span>
+      <span class="pill">Econometrics</span>
+      <span class="pill">Mandarin</span>
+      <span class="pill">Portland, OR</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#projects">View Research</a>
+      <a class="btn btn-outline" href="#contact">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="chart-card">
+      <div class="chart-card-label">HAMR Signal · KO/PEP Spread</div>
+      <svg class="chart-svg" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <line x1="0" y1="130" x2="360" y2="130" stroke="#d4cdc0" stroke-width="1"/>
+        <polyline class="chart-line"
+          points="0,80 22,76 44,87 66,68 88,91 110,63 132,54 154,70 176,44 198,59 220,49 242,71 264,54 286,64 308,43 330,53 352,46 360,50"
+          fill="none" stroke="#3d6647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline class="chart-line"
+          points="0,54 55,58 110,44 165,31 220,36 275,31 360,27"
+          fill="none" stroke="#5a8a65" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>
+        <polyline class="chart-line"
+          points="0,107 55,111 110,116 165,99 220,96 275,88 360,90"
+          fill="none" stroke="#5a8a65" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>
+      </svg>
+      <div class="chart-caption">Out-of-sample validation · 2025</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a <strong>financial analyst on FP&A and Investor Relations teams</strong> at a Fortune 500 company, with a research focus on quantitative finance and China capital markets. My work sits at the intersection of financial econometrics, macroeconomic policy, and systematic trading strategies.</p>
+      <p>My academic background spans <strong>Economics and Chinese Language</strong> (University of Oregon, magna cum laude), and I hold professional certification in Standard Mandarin Chinese (ACTFL). I've lived and worked in <strong>Taipei and Hong Kong</strong>, giving me ground-level perspective on Greater China financial markets.</p>
+      <p>I'm currently preparing to pursue a <strong>PhD in Financial Economics</strong>, targeting programs with strengths in international finance, capital flows, and macro-financial policy — with an eye toward eventual work at institutions like the IMF, World Bank, or BIS.</p>
+    </div>
+    <div class="about-sidebar reveal">
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">Education</div>
+        <div class="sidebar-block-value">BS Economics · BA Chinese<br>University of Oregon, Magna Cum Laude</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">Language</div>
+        <div class="sidebar-block-value">ACTFL Certified — Standard Mandarin<br>DoD National Language Flagship Scholar</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">Experience</div>
+        <div class="sidebar-block-value">FP&A · Investor Relations<br>Taipei · Hong Kong · Portland</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">Currently</div>
+        <div class="sidebar-block-value">Math sequence for PhD prep<br>Calc III → Linear Algebra → Real Analysis</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">Contact</div>
+        <div class="sidebar-block-value">
+          <a href="mailto:your.email@example.com">your.email@example.com</a><br>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Research & Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-version">Pairs Trading · v2.1 — Latest</div>
+      <h3 class="project-title">HAMR Signal: Heteroskedasticity-Adjusted Mean Reversion</h3>
+      <p class="project-desc">Novel volatility-regime-aware signal benchmarked against traditional Bollinger Bands on the KO/PEP spread. Features a cointegration gate, Ornstein–Uhlenbeck half-life filter, and coarse-to-fine grid search pipeline. Strong out-of-sample results in 2025.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Polars</span>
+        <span class="tag">Bloomberg API</span><span class="tag">Cointegration</span>
+        <span class="tag">OU Process</span>
+      </div>
+      <a class="project-link" href="https://github.com/spm01/pairstradingv2.1" target="_blank">View on GitHub →</a>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-version">Pairs Trading · v2.0</div>
+      <h3 class="project-title">Strategy Optimization & Parameter Search</h3>
+      <p class="project-desc">Extended the v1.0 framework with a full <code style="font-family:var(--mono);font-size:.82em;color:var(--green)">run_strategy()</code> pipeline, coarse-to-fine parameter search, burn-in warm-up windows, and systematic benchmarking infrastructure.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Polars</span>
+        <span class="tag">Grid Search</span><span class="tag">Bloomberg API</span>
+      </div>
+      <a class="project-link" href="https://github.com/spm01/pairstradingv2.0" target="_blank">View on GitHub →</a>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-version">Pairs Trading · v1.0</div>
+      <h3 class="project-title">Foundations: Statistical Arbitrage on KO/PEP</h3>
+      <p class="project-desc">Initial implementation of a mean-reversion pairs trading strategy on the Coca-Cola / PepsiCo spread. Established the cointegration testing framework and baseline signal architecture.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Bloomberg API</span>
+        <span class="tag">Cointegration</span><span class="tag">Mean Reversion</span>
+      </div>
+      <a class="project-link" href="https://github.com/spm01/pairstradingv1.0" target="_blank">View on GitHub →</a>
+    </div>
+
+    <div class="project-card wip reveal">
+      <div class="wip-badge">In Progress</div>
+      <div class="project-version">China Macro Research</div>
+      <h3 class="project-title">CNH/CNY Capital Controls & Cross-Border Arbitrage</h3>
+      <p class="project-desc">Investigating CNH/CNY spread dynamics, AH-share premium, and RMB internationalization using Bloomberg data. Framed toward policy-relevant analysis of China's capital account and offshore/onshore divergence.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Bloomberg API</span>
+        <span class="tag">CNH / CNY</span><span class="tag">AH Premium</span>
+      </div>
+      <span style="font-family:var(--mono);font-size:.62rem;color:var(--stone);font-weight:300;">Coming soon</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Tools & Methods</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="reveal">
+      <div class="skill-group-label">Languages & Libraries</div>
+      <ul class="skill-list">
+        <li>Python (Polars, pandas, NumPy)</li>
+        <li>statsmodels / scipy</li>
+        <li>Matplotlib / Seaborn</li>
+        <li>Standard Mandarin Chinese</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-label">Data & Platforms</div>
+      <ul class="skill-list">
+        <li>Bloomberg Terminal / BLPAPI</li>
+        <li>Excel (financial modeling)</li>
+        <li>SQL</li>
+        <li>Git / GitHub</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-label">Methods & Frameworks</div>
+      <ul class="skill-list">
+        <li>Time Series Econometrics</li>
+        <li>Cointegration & Mean Reversion</li>
+        <li>Non-GAAP Financial Analysis</li>
+        <li>Causal Inference (IV, DiD)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- INTERESTS -->
+<section id="interests">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Beyond the Terminal</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="interests-row">
+    <div class="interest-item reveal">
+      <div class="interest-icon">📷</div>
+      <div>
+        <div class="interest-name">Photography</div>
+        <div class="interest-desc">Drawn to street and architectural photography — the geometry of cities, especially in Asia.</div>
+      </div>
+    </div>
+    <div class="interest-item reveal">
+      <div class="interest-icon">🎵</div>
+      <div>
+        <div class="interest-name">Music</div>
+        <div class="interest-desc">Listener and occasional player. Music as counterweight to the quantitative.</div>
+      </div>
+    </div>
+    <div class="interest-item reveal">
+      <div class="interest-icon">語</div>
+      <div>
+        <div class="interest-name">Chinese Language</div>
+        <div class="interest-desc">ACTFL certified in Standard Mandarin. Language as both professional tool and personal obsession.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-heading reveal">Let's <em>connect</em></div>
+  <p class="contact-sub reveal">Open to research conversations, PhD program discussions, and collaborations at the intersection of China macro and quantitative finance.</p>
+  <div class="contact-links reveal">
+    <a class="btn btn-primary" href="mailto:your.email@example.com">Email Me</a>
+    <a class="btn btn-outline" href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+    <a class="btn btn-outline" href="https://github.com/spm01" target="_blank">GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2025 Sean Milligan · spm01.github.io</span>
+  <span class="footer-chinese">米利根</span>
+</footer>
+
+<script>
+/* ── 1. NAV scroll tint + active section ── */
+const nav      = document.getElementById('main-nav');
+const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+const sections = document.querySelectorAll('section[id]');
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) cur = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === cur));
+}, { passive: true });
+
+/* ── 2. PROJECT CARD LIFT (no tilt — cleaner on light bg) ── */
+document.querySelectorAll('.project-card:not(.wip)').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.willChange = 'transform, box-shadow';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.willChange = '';
+  });
+});
+
+/* ── 3. HERO PARALLAX on chart only ── */
+const heroSection = document.getElementById('hero');
+const chartCard   = document.querySelector('.chart-card');
+if (chartCard) {
+  heroSection.addEventListener('mousemove', e => {
+    const dx = (e.clientX / window.innerWidth  - 0.5) * -12;
+    const dy = (e.clientY / window.innerHeight - 0.5) * -7;
+    chartCard.style.transform = `translate(${dx}px, ${dy}px) translateY(-3px)`;
+  });
+  heroSection.addEventListener('mouseleave', () => {
+    chartCard.style.transform = '';
+  });
+}
+
+/* ── 4. MAGNETIC BUTTONS ── */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r  = btn.getBoundingClientRect();
+    const cx = (e.clientX - (r.left + r.width  / 2)) * 0.22;
+    const cy = (e.clientY - (r.top  + r.height / 2)) * 0.22;
+    btn.style.transform = `translate(${cx}px, ${cy}px) translateY(-2px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+/* ── 5. SCROLL REVEAL + section lines ── */
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+        const line = entry.target.querySelector?.('.section-line');
+        if (line) line.style.transform = 'scaleX(1)';
+      }, i * 80);
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
