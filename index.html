@@ -639,7 +639,7 @@
     <div class="project-card reveal">
       <div class="project-version">Pairs Trading · v2.1 — Latest</div>
       <h3 class="project-title">HAMR Signal: Heteroskedasticity-Adjusted Mean Reversion</h3>
-      <p class="project-desc">Novel volatility-regime-aware signal benchmarked against traditional Bollinger Bands on the KO/PEP spread. Features a cointegration gate, Ornstein–Uhlenbeck half-life filter, and coarse-to-fine grid search pipeline. Strong out-of-sample results in 2025.</p>
+      <p class="project-desc">Adds an Ornstein–Uhlenbeck half-life test as a third pre-trade condition, confirming that the spread will revert to its mean within a tradeable time horizon (40-day window) before any position is entered. The additional filter meaningfully reduced trade frequency (only 22 trades over 2.5 years) trading safety for PnL. What's notable is not any single result, but the pattern: the deviation signal outperformed Bollinger Bands in every version, under every filter regime. Robustness across conditions is a harder thing to manufacture than a single good year. This repo represents the terminus of the layered-filter research arc. </p>
       <div class="project-tags">
         <span class="tag">Python</span><span class="tag">Polars</span>
         <span class="tag">Bloomberg API</span><span class="tag">Cointegration</span>
@@ -651,7 +651,7 @@
     <div class="project-card reveal">
       <div class="project-version">Pairs Trading · v2.0</div>
       <h3 class="project-title">Strategy Optimization & Parameter Search</h3>
-      <p class="project-desc">Extended the v1.0 framework with a full <code style="font-family:var(--mono);font-size:.82em;color:var(--green)">run_strategy()</code> pipeline, coarse-to-fine parameter search, burn-in warm-up windows, and systematic benchmarking infrastructure.</p>
+      <p class="project-desc">Extends v1.0 by gating all trade execution behind a rolling cointegration test, ensuring positions are only entered when the KO/PEP relationship is statistically stable. Tested at both p < 0.05 and p < 0.1 thresholds across 2024–2025 out-of-sample data. The filter correctly suppressed trading during the June 2024 breakdown. Where trades did execute, the deviation strategy again outperformed Bollinger Bands. delivering 7.30% vs. 1.12% over the full period at p < 0.1. </p>
       <div class="project-tags">
         <span class="tag">Python</span><span class="tag">Polars</span>
         <span class="tag">Grid Search</span><span class="tag">Bloomberg API</span>
@@ -662,7 +662,7 @@
     <div class="project-card reveal">
       <div class="project-version">Pairs Trading · v1.0</div>
       <h3 class="project-title">Foundations: Statistical Arbitrage on KO/PEP</h3>
-      <p class="project-desc">Initial implementation of a mean-reversion pairs trading strategy on the Coca-Cola / PepsiCo spread. Established the cointegration testing framework and baseline signal architecture.</p>
+      <p class="project-desc">First implementation of a mean-reversion pairs trading strategy on the KO/PEP spread, using Bloomberg data and Python. Tests two signal approaches: a novel "deviation of the deviation" (volatility-of-volatility) method and a standard Bollinger Band baseline across 2024 and 2025 out-of-sample data. The deviation strategy outperformed significantly in 2025, returning approximately +12% versus -2% for Bollinger Bands, despite a later start date due to its burn-in requirement.</p>
       <div class="project-tags">
         <span class="tag">Python</span><span class="tag">Bloomberg API</span>
         <span class="tag">Cointegration</span><span class="tag">Mean Reversion</span>
